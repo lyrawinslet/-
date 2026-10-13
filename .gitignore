@@ -218,3 +218,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---------------------------------------------------------------------------
+# Microgrid dispatch project additions
+# ---------------------------------------------------------------------------
+# isolated interpreter created by `python run.py --setup`
+.venv/
+# recomputation output directory created by run.py (rerun/<timestamp>)
+rerun/
+# LaTeX build intermediates
+*.aux
+*.toc
+*.out
+*.synctex.gz

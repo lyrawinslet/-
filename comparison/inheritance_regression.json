@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-09-12T15:05:19+08:00",
+  "question_id": "Q4",
+  "purpose": "prove that the corrected implementation reproduces the approved Q2/Q3 results when attachment-4 prices are replaced by the original fixed price vector",
+  "fixed_price_source": "data/附件1.xlsx",
+  "q42_residuals": {
+    "actual_total_cost_yuan": -1.862645149230957e-09,
+    "original_contract_kwh": -2.2351741790771484e-08,
+    "emergency_purchase_kwh": -2.1827872842550278e-10,
+    "initial_soc_evaluation_kwh": 0.0,
+    "terminal_soc_evaluation_kwh": 0.0
+  },
+  "q43_residuals": {
+    "actual_total_cost_yuan": -3.725290298461914e-09,
+    "original_contract_kwh": 1.1175870895385742e-08,
+    "final_contract_kwh": 0.0,
+    "adjustment_increase_kwh": -7.566995918750763e-10,
+    "adjustment_decrease_kwh": 5.587935447692871e-09,
+    "emergency_purchase_kwh": -6.111804395914078e-10,
+    "initial_soc_evaluation_kwh": 0.0,
+    "terminal_soc_evaluation_kwh": -1.8189894035458565e-12
+  },
+  "maximum_absolute_residual": 2.2351741790771484e-08,
+  "tolerance": 5e-05,
+  "q42_hard_checks_pass": true,
+  "q43_hard_checks_pass": true,
+  "status": "PASS",
+  "reproduction_entry": "python run.py --task full"
+}

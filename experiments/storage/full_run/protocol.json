@@ -1,0 +1,49 @@
+{
+  "claim": "Does price-aware forecast-based storage reservation improve greedy feedback under the same Q3 contracts?",
+  "status": "EXPERIMENT_ONLY_NOT_OFFICIAL_REPLACEMENT",
+  "evaluation": [
+    "2025-02-01",
+    "2025-12-31"
+  ],
+  "days": 334,
+  "arms": [
+    "greedy_replay",
+    "price_aware_mpc"
+  ],
+  "alpha": 0.8,
+  "gamma": 0.5,
+  "horizon": "current 10-minute interval to current midnight; replan each interval with a deficit and higher future price",
+  "current_information": "same idealized current-interval net-load observation as paper Eq.9",
+  "future_information": "most recent released official forecast plus inherited risk margin; only then-effective contract snapshot; no anticipated revisions",
+  "contracts": "exogenous replay of original schedule, unveiled at 00/06/12/18; no endogenous next-day or intraday procurement changes",
+  "primary": "minimize forecast emergency cost minus gamma*eta*median(price)*terminal_SOC; last day terminal value zero",
+  "tie_break": "maximize current discharge within 1e-7 yuan primary tolerance",
+  "actions": "charge only actual surplus, discharge only deficit; no emergency charging; surplus charging stays greedy",
+  "initial_soc_kwh": 2492.6295222484,
+  "cross_day": "each arm carries its own actual SOC; no daily reset",
+  "cost": "identical original contract plus all original adjustment costs, plus new actual emergency expenses; no fictitious terminal credit",
+  "predeclared_comparison": "report signed cost difference without selecting parameters based on evaluation results",
+  "verification_tolerance_kwh": 5e-05,
+  "source_checks": {
+    "contract_previous_max_abs": 0.0,
+    "fee_max_abs": 2.1868373778488603e-10,
+    "forecast_max_abs": 5.002220859751105e-11,
+    "margin_max_abs": 4.999378688808065e-11
+  },
+  "unit_checks": {
+    "two_period_reserve": 1.9999954092853044e-08,
+    "flat_price_tie_discharge": 0.9999999999999772,
+    "replenishment_before_peak_discharge": 0.9999999999999772,
+    "status": "PASS"
+  },
+  "limitation": "fixed-contract counterfactual isolates execution; does not measure fully reoptimized end-to-end policy or global optimality",
+  "packaged_input_hashes": {
+    "code/q3_model.py": "9237bd7f7146d3c5d3a157d8a3ddc5a5e2c9c415ecc0d1412b2a70e5ea6e68e0",
+    "data/附件1.xlsx": "66b87134f5ecccd68184d3539bb1293ef039f9e0fdd955a589b9bfa7f227c377",
+    "data/附件2.xlsx": "2e95fd446bfafa0d8c59577b5c2e2ea8b3f1def20dde54a3062556f4da9b4c72",
+    "data/附件3.xlsx": "8a61b06c52bd0d639a1cc37c61a7d9f5b75edcbca718f64c1bd3498ec9f9d843",
+    "comparison/q3_main_interval_ledger.csv.gz": "68dbcdc2149f75a90e9bc5a31153ed48d6c4a94be406a6131389e533254d04c0",
+    "experiments/storage/run_experiment.py": "a76c3a70192fc3609fa2b835d7d07144f38bb06ce3151d34f00021071249e38d",
+    "comparison/q3_adjustment_events.csv.gz": "354343ee72b6ea417908d2b0e27d589ad19ac1d07b0f6803a220b258040140b2"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "arithmetic_checks": {
+    "greedy_replay": {
+      "balance_max_kwh": 2.4158453015843406e-13,
+      "state_max_kwh": 1.3005774235352874e-10,
+      "state_chain_max_kwh": 0.0,
+      "constraint_violation_kwh": 1.9184653865522705e-13,
+      "overlap_kwh": 0.0,
+      "emergency_cost_error_yuan": 3.375930646143388e-10,
+      "fixed_cost_error_yuan": 0.0,
+      "delivered_contract_error_kwh": 0.0,
+      "greedy_charge_error_kwh": 1.0054890253741178e-10,
+      "actual_total_cost_yuan_summary_error": 1.862645149230957e-09,
+      "emergency_cost_yuan_summary_error": 3.7834979593753815e-10,
+      "emergency_kwh_summary_error": 5.369656719267368e-09,
+      "unused_kwh_summary_error": 1.1851079761981964e-07
+    },
+    "price_aware_mpc": {
+      "balance_max_kwh": 9.993073035730049e-11,
+      "state_max_kwh": 1.3460521586239338e-10,
+      "state_chain_max_kwh": 0.0,
+      "constraint_violation_kwh": 1.1368683772161603e-13,
+      "overlap_kwh": 0.0,
+      "emergency_cost_error_yuan": 3.624052169470815e-10,
+      "fixed_cost_error_yuan": 0.0,
+      "delivered_contract_error_kwh": 0.0,
+      "greedy_charge_error_kwh": 1.0044895294641494e-10,
+      "actual_total_cost_yuan_summary_error": 0.0,
+      "emergency_cost_yuan_summary_error": 1.7462298274040222e-09,
+      "emergency_kwh_summary_error": 7.043126970529556e-09,
+      "unused_kwh_summary_error": 1.1897645890712738e-07
+    }
+  },
+  "causality_checks": [
+    {
+      "date": "2025-03-20",
+      "interval_index": 66,
+      "available_release_hour": 6,
+      "future_information_perturbed": true,
+      "controller_input_max_difference": 1.1368683772161603e-13,
+      "action_difference_kwh": 0.0
+    },
+    {
+      "date": "2025-06-21",
+      "interval_index": 66,
+      "available_release_hour": 6,
+      "future_information_perturbed": true,
+      "controller_input_max_difference": 1.7053025658242404e-13,
+      "action_difference_kwh": 0.0
+    },
+    {
+      "date": "2025-09-23",
+      "interval_index": 66,
+      "available_release_hour": 6,
+      "future_information_perturbed": true,
+      "controller_input_max_difference": 1.1368683772161603e-13,
+      "action_difference_kwh": 0.0
+    }
+  ],
+  "original_inputs_unchanged": true,
+  "verifier_sha256": "bbc3ba85c8454e2a4334cf0847bcbd8e4d8efe6709a7c61231a90602cb33d794",
+  "boundary": "Checks fixed-contract execution; does not certify a different endogenous procurement policy."
+}

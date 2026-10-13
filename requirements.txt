@@ -1,0 +1,11 @@
+# 复现四问主方案所需的第三方依赖（版本与 run.py 中固定的 PACKAGES 完全一致）
+#
+# 说明：
+#   * python run.py --task verify      核对随包提交的五份结果，只用标准库，无需安装本文件依赖；
+#   * python run.py --setup            会在包内创建 .venv 并按下面四个固定版本联网安装；
+#   * 若使用系统 Python 直接复现，可执行：pip install -r requirements.txt
+#   * Python 版本要求：64 位 Python 3.11 / 3.12 / 3.13（论文与提交结果在 3.12 上复现）
+numpy==2.3.5
+scipy==1.17.0
+pandas==2.2.3
+openpyxl==3.1.5

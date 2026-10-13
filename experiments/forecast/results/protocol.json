@@ -1,0 +1,42 @@
+{
+  "status": "DIAGNOSTIC_ONLY_NO_OFFICIAL_REPLACEMENT",
+  "evaluation": [
+    "2025-02-01",
+    "2025-12-31"
+  ],
+  "forecasting": "one-day-at-a-time causal replay; every target uses only earlier days, Q3 uses released forecasts",
+  "baselines": {
+    "seasonal_persistence": "load previous week same slot; PV previous day same slot; before day7 load yesterday",
+    "equal_window_mean": "same weekdays within preceding28d load mean, preceding7d PV mean; no exponential weights"
+  },
+  "adopted": "same weekdays preceding28d load and preceding7d PV, exp(-age/7) weights",
+  "margin": "alpha=.8; each predictor reconstructs prior forecast errors using unchanged Q2 four-hour pooling",
+  "gamma_values": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "gamma_default": 0.5,
+  "initialization": "all policy runs start Jan1 at6000kWh and carry own realized SOC; costs evaluated Feb-Dec",
+  "gamma_scope": "Q2 and Q3 full policy reruns; forecasts and margins fixed within each question",
+  "coverage": "fraction of actual net-load energy <= issued point forecast + nonnegative historical margin; not supply reliability",
+  "q3_coverage_scope": "both latest forecast actually used in each6h block, and each release on all remaining same-day slots",
+  "no_new_parameter_selection": true,
+  "limitations": [
+    "Historical dataset has already informed method choices; this is causal retrospective validation, not a pristine holdout.",
+    "Jan1 state is common; different Feb1 states are consequences of January policy operation and must be reported."
+  ],
+  "packaged_input_hashes": {
+    "code/q3_model.py": "9237bd7f7146d3c5d3a157d8a3ddc5a5e2c9c415ecc0d1412b2a70e5ea6e68e0",
+    "data/附件1.xlsx": "66b87134f5ecccd68184d3539bb1293ef039f9e0fdd955a589b9bfa7f227c377",
+    "data/附件2.xlsx": "2e95fd446bfafa0d8c59577b5c2e2ea8b3f1def20dde54a3062556f4da9b4c72",
+    "data/附件3.xlsx": "8a61b06c52bd0d639a1cc37c61a7d9f5b75edcbca718f64c1bd3498ec9f9d843",
+    "comparison/q3_main_interval_ledger.csv.gz": "68dbcdc2149f75a90e9bc5a31153ed48d6c4a94be406a6131389e533254d04c0",
+    "experiments/forecast/run_validation.py": "e3fa07924c74fd515cde8b1074d4630abe60470266d191e788ed90deceb593a0",
+    "code/q2_common.py": "05e63b374964c0ec33962de22992bdedcf280ea104f7dd005c5ec9eda527e60f",
+    "code/q2_full_feedback.py": "365c1a3fc514bffffc355e3a5a6b7c274655e61e30d7104aac0735005258835c",
+    "code/q2_forecast_experiment.py": "efbff8f79c38513ca8cb51ebcda34bc1b82ce61c2531089c26c5be60bae99e5e",
+    "comparison/q2_main_interval_ledger.csv.gz": "9b9d1f00f60858b03cd0dc6a5e27beddef0c967b0680cccfcf9f4481683573b4",
+    "comparison/sensitivity_comparison.csv": "9aad9ed51180e98016062859f4901b8c3917185e67938bcb99ff90c7185d490e"
+  }
+}

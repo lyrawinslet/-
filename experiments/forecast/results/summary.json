@@ -1,0 +1,201 @@
+{
+  "status": "CONDITIONAL",
+  "verification_status": "PASS",
+  "official_strategy_changed": false,
+  "forecast_comparison": [
+    {
+      "n": 48096,
+      "load_mae_kw": 166.0340524674195,
+      "pv_mae_kw": 150.60997507034352,
+      "net_mae_kwh": 43.974295736373016,
+      "net_rmse_kwh": 63.41333996612157,
+      "net_bias_kwh": -0.08641536495819363,
+      "net_error_q80_kwh": 37.33379507664404,
+      "coverage_percent": 78.81528609447771,
+      "excess_mean_kwh": 7.410031008198522,
+      "mode": "adopted",
+      "actual_total_cost_yuan": 13923903.386969224,
+      "emergency_kwh": 111928.37713393185,
+      "initial_soc_feb1_kwh": 2474.99712581418
+    },
+    {
+      "n": 48096,
+      "load_mae_kw": 176.79572117223884,
+      "pv_mae_kw": 185.34649152736193,
+      "net_mae_kwh": 50.63819206448215,
+      "net_rmse_kwh": 74.70192494577569,
+      "net_bias_kwh": -0.19807539850855901,
+      "net_error_q80_kwh": 41.32341666666662,
+      "coverage_percent": 79.41824683965403,
+      "excess_mean_kwh": 8.467172414892433,
+      "mode": "seasonal_persistence",
+      "actual_total_cost_yuan": 14101205.813796693,
+      "emergency_kwh": 102731.14518119507,
+      "initial_soc_feb1_kwh": 2325.1978978148104
+    },
+    {
+      "n": 48096,
+      "load_mae_kw": 188.8801444901863,
+      "pv_mae_kw": 153.39970672494297,
+      "net_mae_kwh": 47.48412584513513,
+      "net_rmse_kwh": 66.84797467379813,
+      "net_bias_kwh": -0.3581878653655198,
+      "net_error_q80_kwh": 42.97925535714273,
+      "coverage_percent": 78.70301064537591,
+      "excess_mean_kwh": 7.235669062614681,
+      "mode": "equal_window_mean",
+      "actual_total_cost_yuan": 13913353.021627275,
+      "emergency_kwh": 104955.6811433189,
+      "initial_soc_feb1_kwh": 2468.100133478836
+    }
+  ],
+  "coverage_overall": [
+    {
+      "question": "Q2",
+      "group": "overall",
+      "n": 48096,
+      "covered_n": 37907,
+      "coverage_percent": 78.81528609447771,
+      "exceedance_percent": 21.18471390552229,
+      "mae_kwh": 43.974295736373016,
+      "mean_margin_kwh": 42.730876628054105,
+      "excess_mean_kwh": 7.410031008198522,
+      "scope": "unique_intervals"
+    },
+    {
+      "question": "Q3",
+      "group": "overall",
+      "n": 48096,
+      "covered_n": 37202,
+      "coverage_percent": 77.34946773120426,
+      "exceedance_percent": 22.650532268795743,
+      "mae_kwh": 34.54110181879133,
+      "mean_margin_kwh": 31.82106178211187,
+      "excess_mean_kwh": 6.102527514621647,
+      "scope": "unique_intervals"
+    }
+  ],
+  "gamma_comparison": [
+    {
+      "question": "Q2",
+      "gamma": 0.0,
+      "actual_total_cost_yuan": 13923903.386969224,
+      "emergency_kwh": 111928.37713393173,
+      "initial_soc_feb1_kwh": 2474.99712581418,
+      "terminal_soc_kwh": 1718.6737161078236,
+      "mean_carryover_soc_kwh": 2232.6044916673777,
+      "upper_carryover_days": 0,
+      "cost_change_vs_gamma05_yuan": 0.0
+    },
+    {
+      "question": "Q2",
+      "gamma": 0.5,
+      "actual_total_cost_yuan": 13923903.386969224,
+      "emergency_kwh": 111928.37713393185,
+      "initial_soc_feb1_kwh": 2474.99712581418,
+      "terminal_soc_kwh": 1718.6737161078236,
+      "mean_carryover_soc_kwh": 2232.6044916673773,
+      "upper_carryover_days": 0,
+      "cost_change_vs_gamma05_yuan": 0.0
+    },
+    {
+      "question": "Q2",
+      "gamma": 1.0,
+      "actual_total_cost_yuan": 14102566.38687645,
+      "emergency_kwh": 101980.15689101664,
+      "initial_soc_feb1_kwh": 10800.0,
+      "terminal_soc_kwh": 1718.6737161078236,
+      "mean_carryover_soc_kwh": 10767.656184406671,
+      "upper_carryover_days": 303,
+      "cost_change_vs_gamma05_yuan": 178662.99990722723
+    },
+    {
+      "question": "Q3",
+      "gamma": 0.0,
+      "actual_total_cost_yuan": 13833843.322825493,
+      "emergency_kwh": 51525.69845537505,
+      "initial_soc_feb1_kwh": 2492.629522077373,
+      "terminal_soc_kwh": 1661.099380902042,
+      "mean_carryover_soc_kwh": 2207.637694137586,
+      "upper_carryover_days": 0,
+      "cost_change_vs_gamma05_yuan": 0.00018723495304584503
+    },
+    {
+      "question": "Q3",
+      "gamma": 0.5,
+      "actual_total_cost_yuan": 13833843.322638258,
+      "emergency_kwh": 51525.69845274206,
+      "initial_soc_feb1_kwh": 2492.6295222483786,
+      "terminal_soc_kwh": 1661.099380902042,
+      "mean_carryover_soc_kwh": 2207.6376954911602,
+      "upper_carryover_days": 0,
+      "cost_change_vs_gamma05_yuan": 0.0
+    },
+    {
+      "question": "Q3",
+      "gamma": 1.0,
+      "actual_total_cost_yuan": 14005735.032060161,
+      "emergency_kwh": 39980.758272233834,
+      "initial_soc_feb1_kwh": 10800.0,
+      "terminal_soc_kwh": 1661.099380902042,
+      "mean_carryover_soc_kwh": 10766.813387533104,
+      "upper_carryover_days": 307,
+      "cost_change_vs_gamma05_yuan": 171891.7094219029
+    }
+  ],
+  "causality_checks": [
+    {
+      "cut_day_index": 31,
+      "mode": "adopted",
+      "max_difference": 1.1368683772161603e-13
+    },
+    {
+      "cut_day_index": 31,
+      "mode": "seasonal_persistence",
+      "max_difference": 2.0605739337042905e-13
+    },
+    {
+      "cut_day_index": 31,
+      "mode": "equal_window_mean",
+      "max_difference": 1.1368683772161603e-13
+    },
+    {
+      "cut_day_index": 180,
+      "mode": "adopted",
+      "max_difference": 1.1368683772161603e-13
+    },
+    {
+      "cut_day_index": 180,
+      "mode": "seasonal_persistence",
+      "max_difference": 2.0605739337042905e-13
+    },
+    {
+      "cut_day_index": 180,
+      "mode": "equal_window_mean",
+      "max_difference": 1.8207657603852567e-13
+    },
+    {
+      "cut_day_index": 300,
+      "mode": "adopted",
+      "max_difference": 1.8474111129762605e-13
+    },
+    {
+      "cut_day_index": 300,
+      "mode": "seasonal_persistence",
+      "max_difference": 2.0605739337042905e-13
+    },
+    {
+      "cut_day_index": 300,
+      "mode": "equal_window_mean",
+      "max_difference": 1.8207657603852567e-13
+    }
+  ],
+  "source_hashes_unchanged": true,
+  "runtime_seconds": 308.08404729999984,
+  "limitations": [
+    "Historical dataset has already informed method choices; this is causal retrospective validation, not a pristine holdout.",
+    "Jan1 state is common; different Feb1 states are consequences of January policy operation and must be reported.",
+    "Empirical coverage is not a formal chance constraint or guaranteed reliability.",
+    "Gamma grid is a sensitivity diagnostic, not an optimizer; policy evaluation includes different January-induced February starting SOC."
+  ]
+}

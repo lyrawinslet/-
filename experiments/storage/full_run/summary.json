@@ -1,0 +1,73 @@
+{
+  "status": "CONDITIONAL",
+  "verification_status": "PASS",
+  "official_strategy_changed": false,
+  "claim": "Does price-aware forecast-based storage reservation improve greedy feedback under the same Q3 contracts?",
+  "arms": [
+    {
+      "contract_cost_yuan": 13586618.432917668,
+      "emergency_cost_yuan": 247224.88972058526,
+      "actual_total_cost_yuan": 13833843.322638253,
+      "emergency_kwh": 51525.69845274143,
+      "unused_kwh": 1961159.1022811502,
+      "charge_kwh": 6367238.828987096,
+      "discharge_kwh": 5158211.82860676,
+      "withheld_vs_greedy_kwh": 0.0,
+      "arm": "greedy_replay",
+      "days": 334,
+      "initial_soc_kwh": 2492.6295222484,
+      "terminal_soc_kwh": 1661.099380901665,
+      "emergency_intervals": 720,
+      "withheld_intervals": 0,
+      "lp_pairs": 0,
+      "runtime_seconds": 3.9576059999999416,
+      "verification": {
+        "balance": 1.1368683772161603e-13,
+        "state": 9.094947017729282e-13,
+        "chain": 0.0,
+        "bounds": 0.0,
+        "overlap": 0.0,
+        "contract": 0.0,
+        "baseline_reproduction": 1.1448832992755342e-09
+      }
+    },
+    {
+      "contract_cost_yuan": 13586618.432917668,
+      "emergency_cost_yuan": 351752.97461693163,
+      "actual_total_cost_yuan": 13938371.4075346,
+      "emergency_kwh": 88689.61300601016,
+      "unused_kwh": 2007040.47827284,
+      "charge_kwh": 6321357.452995406,
+      "discharge_kwh": 5121047.914053491,
+      "withheld_vs_greedy_kwh": 68588.1782831077,
+      "arm": "price_aware_mpc",
+      "days": 334,
+      "initial_soc_kwh": 2492.6295222484,
+      "terminal_soc_kwh": 1661.099380901665,
+      "emergency_intervals": 2655,
+      "withheld_intervals": 2201,
+      "lp_pairs": 15532,
+      "runtime_seconds": 297.0148082000005,
+      "verification": {
+        "balance": 1.1368683772161603e-13,
+        "state": 9.094947017729282e-13,
+        "chain": 0.0,
+        "bounds": 0.0,
+        "overlap": 0.0,
+        "contract": 0.0
+      }
+    }
+  ],
+  "saving_yuan": -104528.08489634655,
+  "saving_percent": -0.7555968537340063,
+  "days_mpc_cheaper": 19,
+  "days_mpc_dearer": 277,
+  "max_daily_loss_yuan": 4004.0702715567604,
+  "terminal_soc_difference_kwh": 0.0,
+  "source_hashes_unchanged": true,
+  "limitations": [
+    "fixed-contract counterfactual isolates execution; does not measure fully reoptimized end-to-end policy or global optimality",
+    "risk level and terminal value inherited, not newly tuned; the test cannot establish superiority over all causal controllers",
+    "current interval observation follows the same idealization as the original paper"
+  ]
+}
