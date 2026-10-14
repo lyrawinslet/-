@@ -9,9 +9,14 @@
 ![Solver](https://img.shields.io/badge/Solver-HiGHS%20via%20scipy-0B7285)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-**关键交付物**：[论文全文（28 页 + 附录）](docs/论文_正文28页_图12拆分修正版.pdf) ·
-[五份结果工作簿](#三结果速览) · [交互式分析页面](dashboard/CUMCM_lab.html) ·
+**关键交付物**：🌐 [在线项目主页](https://lyrawinslet.github.io/microgrid-storage-dispatch/) ·
+[论文全文（28 页 + 附录）](docs/论文_正文28页_图12拆分修正版.pdf) ·
+[五份结果工作簿](#三结果速览) · [交互式调度看板](https://lyrawinslet.github.io/microgrid-storage-dispatch/dashboard/CUMCM_lab.html) ·
 [数据与结果说明](docs/数据与结果说明.md)
+
+> 在线主页由 **GitHub Pages** 免费托管（根目录 `index.html` + `.nojekyll`，无构建步骤）：
+> <https://lyrawinslet.github.io/microgrid-storage-dispatch/> —— 可直接分享给他人查看结果、图表与交互式看板。
+> 提示：若该链接暂时 404，说明仓库的 Pages 尚未启用（Settings → Pages → Deploy from a branch → `main` / `(root)`）。
 
 ---
 
@@ -233,6 +238,8 @@ $$
 
 ```
 microgrid-storage-dispatch/
+├── index.html                    # GitHub Pages 在线主页（单文件，无 CDN 依赖）
+├── .nojekyll                     # 关闭 Jekyll，按静态文件原样发布
 ├── README.md                     # 本文件：问题、模型、结果、复现说明
 ├── LICENSE                       # MIT（代码）
 ├── requirements.txt              # numpy/scipy/pandas/openpyxl 固定版本

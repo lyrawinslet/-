@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light dark" />
+<title>基于两级线性规划与滚动调整的微网购电及储能调度</title>
+<meta name="description" content="微网购电与储能调度：两级线性规划 + 风险裕量 + 滚动改约 + 实时反馈。四问全部结果可一键复现核对（701,026 项数值检查通过）。" />
+<meta property="og:title" content="基于两级线性规划与滚动调整的微网购电及储能调度" />
+<meta property="og:description" content="微网购电与储能调度建模项目：四问模型、结果与可复现代码。" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b7285'/%3E%3Cpath d='M18.5 5 8 18h6l-1.5 9L24 14h-6z' fill='%23fff'/%3E%3C/svg%3E" />
+<style>
+  :root{
+    --bg:#f6f7f9; --panel:#ffffff; --ink:#12181f; --muted:#5b6672; --line:#e3e7ec;
+    --brand:#0b7285; --brand-2:#0f8a7e; --accent:#b8860b; --good:#0f7b3f; --bad:#b42318;
+    --shadow:0 1px 2px rgba(16,24,40,.06),0 8px 24px rgba(16,24,40,.06);
+    --radius:14px; --mono:ui-monospace,SFMono-Regular,"Cascadia Mono",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#0d1117; --panel:#151b23; --ink:#e8edf3; --muted:#98a4b3; --line:#252d38;
+      --brand:#4dd4c4; --brand-2:#7ee0d0; --accent:#e3b341; --good:#4ac486; --bad:#ff8b7e;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);line-height:1.7;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--brand);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+  header.top{
+    position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);
+    background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line);
+  }
+  .top .wrap{display:flex;align-items:center;gap:14px;height:56px}
+  .top .brand{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .top nav{margin-left:auto;display:flex;gap:16px;font-size:14px;white-space:nowrap}
+  .top nav a{color:var(--muted)}
+  @media (max-width:640px){.top nav{display:none}}
+
+  .hero{padding:56px 0 8px}
+  .eyebrow{
+    display:inline-block;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--brand);border:1px solid var(--line);background:var(--panel);
+    padding:4px 10px;border-radius:999px;margin-bottom:18px;
+  }
+  h1{font-size:clamp(26px,4.4vw,42px);line-height:1.28;margin:0 0 16px;letter-spacing:-.01em}
+  .lede{font-size:clamp(15px,1.6vw,17px);color:var(--muted);max-width:74ch;margin:0 0 22px}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+  .tag{font-size:12.5px;color:var(--muted);border:1px solid var(--line);background:var(--panel);padding:3px 10px;border-radius:999px}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:11px;
+    border:1px solid var(--line);background:var(--panel);color:var(--ink);font-weight:600;font-size:14.5px;
+    box-shadow:var(--shadow);transition:transform .12s ease,border-color .12s ease;
+  }
+  .btn:hover{text-decoration:none;transform:translateY(-1px);border-color:var(--brand)}
+  .btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;border-color:transparent}
+  .btn.primary:hover{filter:brightness(1.05)}
+  .status{font-size:13.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .dot{color:var(--good);font-weight:700}
+
+  section{padding:44px 0 6px;border-top:1px solid var(--line);margin-top:40px}
+  h2{font-size:clamp(19px,2.4vw,25px);margin:0 0 6px}
+  .sub{color:var(--muted);font-size:14.5px;margin:0 0 22px}
+
+  .cards{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(292px,1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+  .card .k{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+  .card .cost{font-size:clamp(20px,2.6vw,26px);font-weight:700;letter-spacing:-.01em;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+  .card .cost small{font-size:13px;font-weight:500;color:var(--muted);margin-left:4px}
+  .card .delta{font-size:13.5px;color:var(--good)}
+  .card .note{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .badge{font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:1px 8px;color:var(--muted);white-space:nowrap;align-self:flex-start}
+
+  ol.findings{margin:0;padding-left:0;list-style:none;counter-reset:f}
+  ol.findings li{
+    counter-increment:f;position:relative;padding:12px 0 12px 46px;border-bottom:1px dashed var(--line);
+  }
+  ol.findings li:last-child{border-bottom:0}
+  ol.findings li::before{
+    content:counter(f);position:absolute;left:0;top:12px;width:28px;height:28px;border-radius:9px;
+    display:grid;place-items:center;font-weight:700;font-size:13.5px;
+    background:color-mix(in srgb,var(--brand) 14%,transparent);color:var(--brand);
+  }
+  ol.findings b{color:var(--ink)}
+
+  .gallery{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+  figure img{display:block;width:100%;height:auto;background:#fff}
+  figure figcaption{padding:10px 14px;font-size:13px;color:var(--muted);border-top:1px solid var(--line)}
+  figure figcaption b{color:var(--ink);font-weight:600}
+
+  .cols{display:grid;gap:22px;grid-template-columns:1.15fr .85fr}
+  @media (max-width:760px){.cols{grid-template-columns:1fr}}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+  .panel h3{margin:0 0 10px;font-size:16px}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px;margin:0}
+  .kv dt{color:var(--muted);white-space:nowrap}
+  .kv dd{margin:0;font-variant-numeric:tabular-nums}
+  pre{
+    background:color-mix(in srgb,var(--ink) 6%,var(--panel));border:1px solid var(--line);border-radius:11px;
+    padding:14px 16px;overflow:auto;font-family:var(--mono);font-size:13px;line-height:1.65;margin:0 0 12px;
+  }
+  code{font-family:var(--mono);font-size:.94em}
+  p code,li code{background:color-mix(in srgb,var(--ink) 6%,transparent);padding:1px 5px;border-radius:5px}
+  .formula{
+    font-family:var(--mono);font-size:13.5px;color:var(--muted);
+    background:color-mix(in srgb,var(--brand) 7%,transparent);border-left:3px solid var(--brand);
+    padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0;overflow:auto;
+  }
+  ul.plain{margin:0;padding-left:20px;font-size:14px;color:var(--muted)}
+  ul.plain li{margin:5px 0}
+  footer{margin-top:52px;border-top:1px solid var(--line);padding:26px 0 46px;color:var(--muted);font-size:13.5px}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <span class="brand">微网购电及储能调度 · 两级线性规划与滚动调整</span>
+    <nav>
+      <a href="#results">结果</a>
+      <a href="#figures">图表</a>
+      <a href="#method">方法</a>
+      <a href="#repro">复现</a>
+      <a href="https://github.com/lyrawinslet/microgrid-storage-dispatch">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="hero">
+    <span class="eyebrow">数学建模 · 微网调度</span>
+    <h1>基于两级线性规划与滚动调整的<br>微网购电及储能调度</h1>
+    <p class="lede">
+      光伏出力与用电负荷在时间分布上错位，必须依靠外网购电与储能调节维持供需平衡。
+      本项目构建「<b>两级线性规划 + 风险裕量 + 滚动改约 + 实时反馈</b>」的统一调度框架，
+      在同一套约束下求解典型日优化、日初固定采购、日内滚动改约与波动电价四类决策场景，
+      在 2025 年 2—12 月共 <b>334 天 / 48,096 个 10 分钟时段</b>上完成全量计算与独立核验。
+    </p>
+    <div class="tags">
+      <span class="tag">Python 3.12</span>
+      <span class="tag">SciPy · HiGHS</span>
+      <span class="tag">两级线性规划</span>
+      <span class="tag">经验分位数风险裕量</span>
+      <span class="tag">滚动时域优化</span>
+      <span class="tag">48,096 时段全量复现</span>
+    </div>
+    <div class="cta">
+      <a class="btn primary" href="dashboard/CUMCM_lab.html">▶ 打开交互式调度看板</a>
+      <a class="btn" href="docs/论文_正文28页_图12拆分修正版.pdf">论文全文（28 页 PDF）</a>
+      <a class="btn" href="https://github.com/lyrawinslet/microgrid-storage-dispatch">源码仓库</a>
+      <a class="btn" href="https://github.com/lyrawinslet/microgrid-storage-dispatch/blob/main/README.md">复现说明</a>
+    </div>
+    <p class="status">
+      <span><span class="dot">✔</span> CI 结果核对通过</span>
+      <span>701,026 项数值检查</span>
+      <span>最大绝对差异 2.24e-08</span>
+      <span>仅用 Python 标准库即可核对</span>
+    </p>
+  </div>
+
+  <section id="results">
+    <h2>四问结果速览</h2>
+    <p class="sub">五份提交工作簿既是结果，也是重算时的格式基准；重算只写入新目录，永不覆盖提交值。</p>
+    <div class="cards">
+      <div class="card">
+        <div class="k"><span>问题一 · 典型日</span><span class="badge">result1</span></div>
+        <div class="cost">35,126.95<small>元</small></div>
+        <div class="delta">较无储能方案 −26.90%</div>
+        <div class="note">购电量仅降 3.73%：收益来自时序转移，日末储电量回归日初 6,000 kWh</div>
+      </div>
+      <div class="card">
+        <div class="k"><span>问题二 · 固定合同</span><span class="badge">result2</span></div>
+        <div class="cost">13,923,903.39<small>元</small></div>
+        <div class="delta">较零裕量方案 −9.18%</div>
+        <div class="note">紧急购电 111,928.38 kWh（−79.45%）；880 个时段、201 次连续补购事件</div>
+      </div>
+      <div class="card">
+        <div class="k"><span>问题三 · 滚动调整</span><span class="badge">result3</span></div>
+        <div class="cost">13,833,843.32<small>元</small></div>
+        <div class="delta">较仅 0 时预报 −1.96%</div>
+        <div class="note">紧急购电 51,525.70 kWh（−73.18%）；新增 12 时改约机会贡献最大</div>
+      </div>
+      <div class="card">
+        <div class="k"><span>问题四 · 波动电价（固定合同）</span><span class="badge">result4-2</span></div>
+        <div class="cost">14,571,629.31<small>元</small></div>
+        <div class="delta">较零裕量方案 −9.64%</div>
+        <div class="note">紧急购电 114,255.22 kWh（−79.71%）；较固定电价 +4.65%</div>
+      </div>
+      <div class="card">
+        <div class="k"><span>问题四 · 波动电价（滚动调整）</span><span class="badge">result4-3</span></div>
+        <div class="cost">14,487,237.24<small>元</small></div>
+        <div class="delta">较零裕量方案 −0.98%</div>
+        <div class="note">比固定合同策略再省 84,392.08 元（−0.58%）；紧急购电 56,367.66 kWh</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>四条核心结论</h2>
+    <p class="sub">全部结论都带有对照方案与显著性检验，包括"并非每月占优"这类反向结果。</p>
+    <ol class="findings">
+      <li><b>储能的价值来自时序转移，而不是少买电。</b>问题一费用降幅 26.90% 远大于购电量降幅 3.73%：
+        储能吸收 6,247.96 kWh 富余光伏，放电量达到充电量的 0.81 倍，充放电损耗 3,940.73 kWh。</li>
+      <li><b>风险裕量以"更多正常采购"换取"更少高价补购"。</b>问题二合同购电费增加 1,112,028.68 元，
+        紧急购电费减少 2,519,330.08 元，净省 1,407,301.40 元；两方案预测精度完全相同
+        （净负荷 MAE 43.97 kWh/时段），说明节费来自采购安排与储能运行，而非预测更准。</li>
+      <li><b>滚动改约的收益集中在午间新增预报。</b>四时点方案比仅 0 时方案节省 275,921.60 元（1.96%）；
+        改约可能"净减购却净支出"，结算必须逐时段、逐次计费。</li>
+      <li><b>预测更准 ≠ 费用更低。</b>官方光伏预报把净负荷 MAE 从 43.97 降到 34.54 kWh/时段，
+        但其合同购电与调整费用高 27.49 万元，紧急购电费只低 2.70 万元，总费用反而高 24.79 万元。</li>
+    </ol>
+  </section>
+
+  <section id="figures">
+    <h2>论文图表</h2>
+    <p class="sub">点击图片可查看原始分辨率（另有 <a href="https://github.com/lyrawinslet/microgrid-storage-dispatch/tree/main/figures">全部 18 张插图</a>）。</p>
+    <div class="gallery">
+      <figure>
+        <a href="figures/fig01_framework.png"><img src="figures/fig01_framework.png" alt="微网电力调控的总体建模框架" loading="lazy" /></a>
+        <figcaption><b>图 1</b>　微网电力调控的总体建模框架</figcaption>
+      </figure>
+      <figure>
+        <a href="figures/fig02_q1_typical_day.png"><img src="figures/fig02_q1_typical_day.png" alt="典型日确定性调度下的电价、购电与储能运行" loading="lazy" /></a>
+        <figcaption><b>图 2</b>　典型日调度：低价时段购电充能，晚间放电替代高价外购</figcaption>
+      </figure>
+      <figure>
+        <a href="figures/fig03_q2_monthly_cost.png"><img src="figures/fig03_q2_monthly_cost.png" alt="问题二分月购电费用及节省额" loading="lazy" /></a>
+        <figcaption><b>图 3</b>　问题二分月费用与节省额：11 个月中 10 个月更省</figcaption>
+      </figure>
+      <figure>
+        <a href="figures/fig08_q3_rolling_operation.png"><img src="figures/fig08_q3_rolling_operation.png" alt="3 月 20 日滚动合同调整与储能运行过程" loading="lazy" /></a>
+        <figcaption><b>图 8</b>　问题三滚动改约与储能运行（3 月 20 日）</figcaption>
+      </figure>
+      <figure>
+        <a href="figures/fig12_q3_forecast_error.png"><img src="figures/fig12_q3_forecast_error.png" alt="净负荷预测与实测对比及分时段误差分布" loading="lazy" /></a>
+        <figcaption><b>图 12</b>　净负荷预测与实测对比及分时段误差分布</figcaption>
+      </figure>
+      <figure>
+        <a href="figures/fig13_q4_typical_day.png"><img src="figures/fig13_q4_typical_day.png" alt="两类策略在固定与波动电价下的典型日调度对比" loading="lazy" /></a>
+        <figcaption><b>图 13</b>　问题四：固定电价与波动电价下的典型日调度对比</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="method">
+    <h2>方法：两级线性规划</h2>
+    <p class="sub">先买得最省，再在费用不变的前提下少折腾储能——不需要整数变量。</p>
+    <div class="cols">
+      <div class="panel">
+        <h3>两级求解</h3>
+        <p style="margin:0 0 8px;font-size:14.5px;color:var(--muted)">
+          第一级最小化购电费用；第二级在 <code>1e-6</code> 元容差内最小化规划充放电总量。论文证明：
+          在允许无成本弃置时，同时充放电总能被"少充少放"的等价解替换而不改变平衡与费用，
+          因此第二级最优解自动满足互斥条件 <code>c·r = 0</code>，模型保持线性，可直接用 HiGHS 高效求解。
+        </p>
+        <div class="formula">min Σ pₜqₜ　→　min Σ (c̃ₜ + r̃ₜ)　s.t. Σ pₜqₜ ≤ C* + 1e-6</div>
+        <p style="margin:0;font-size:14.5px;color:var(--muted)">
+          日初模型 720 个变量 / 288 个等式约束，6 时滚动模型 864 个变量 / 324 个等式约束，
+          评价期 334 天每天多次求解。
+        </p>
+      </div>
+      <div class="panel">
+        <h3>关键参数</h3>
+        <dl class="kv">
+          <dt>时段粒度</dt><dd>Δt = 1/6 h，144 时段/日</dd>
+          <dt>储能容量</dt><dd>12,000 kWh（限值 1,200 / 10,800）</dd>
+          <dt>充放功率</dt><dd>5,000 kW（单时段 ≤ 833.33 kWh）</dd>
+          <dt>效率</dt><dd>η_c = η_d = 0.90</dd>
+          <dt>风险分位数</dt><dd>α = 0.80（线性插值经验分位数）</dd>
+          <dt>日末价值</dt><dd>γ = 0.5 × η_d × 电价中位数</dd>
+          <dt>紧急购电</dt><dd>交易时刻电价的 5 倍</dd>
+          <dt>改约结算</dt><dd>增购 1.5 倍 / 减购净退 0.5 倍</dd>
+          <dt>评价期</dt><dd>2025-02-01 — 12-31，334 天</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="repro">
+    <h2>一键复现</h2>
+    <p class="sub">需要 64 位 Python 3.11–3.13。核对流程只用标准库，几秒即可完成。</p>
+    <pre><code>git clone https://github.com/lyrawinslet/microgrid-storage-dispatch.git
+cd microgrid-storage-dispatch
+
+python run.py --task verify     # 核对已提交的五份结果：701,026 项数值检查，约 10 秒
+python run.py --setup           # 在仓库内创建 .venv 并安装固定版本依赖（首次需联网）
+python run.py --task full       # 全量重算四问与全部对照检验，输出到 rerun/&lt;时间戳&gt;/</code></pre>
+    <ul class="plain">
+      <li>重算一律写入新建的 <code>rerun/&lt;时间戳&gt;/</code>，<b>不会覆盖</b>仓库中五份提交结果；</li>
+      <li>依赖固定为 <code>numpy==2.3.5</code>、<code>scipy==1.17.0</code>、<code>pandas==2.2.3</code>、<code>openpyxl==3.1.5</code>；</li>
+      <li>仓库结构、数据字段与每份结果工作表说明见
+        <a href="https://github.com/lyrawinslet/microgrid-storage-dispatch/blob/main/docs/数据与结果说明.md">docs/数据与结果说明.md</a>；</li>
+      <li>AI 工具使用与人工核验说明见
+        <a href="docs/AI工具使用详情.pdf">docs/AI工具使用详情.pdf</a>。</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 lyrawinslet · 代码以 <a href="https://github.com/lyrawinslet/microgrid-storage-dispatch/blob/main/LICENSE">MIT 许可证</a> 开源</span>
+    <span>题目原始附件与论文版权归竞赛主办方及原作者所有，仅用于学习与复现交流</span>
+    <span><a href="https://github.com/lyrawinslet/microgrid-storage-dispatch">github.com/lyrawinslet/microgrid-storage-dispatch</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
